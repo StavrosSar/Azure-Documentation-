@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "doc_type": "invoice",
+  "model_id": "prebuilt-invoice",
+  "labels": {
+    "doc_type": "invoice",
+    "version": "1.0",
+    "fields": [
+      {
+        "name": "date",
+        "type": "date",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "total",
+        "type": "currency",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "company_name",
+        "type": "string",
+        "required": true,
+        "hints": null,
+        "description": null
+      }
+    ]
+  },
+  "data": {
+    "date": {
+      "value": "2016-12-19",
+      "confidence": 0.965,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceDate"
+      }
+    },
+    "total": {
+      "value": 4304.03,
+      "confidence": 0.916,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceTotal",
+        "currency": {
+          "amount": 4304.03,
+          "currencyCode": "USD",
+          "currencySymbol": "$"
+        }
+      }
+    },
+    "company_name": {
+      "value": "Abbott, Martinez and Nunez",
+      "confidence": 0.893,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "VendorName"
+      }
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "meta": {
+    "documents": 1
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "doc_type": "invoice",
+  "model_id": "prebuilt-invoice",
+  "labels": {
+    "doc_type": "invoice",
+    "version": "1.0",
+    "fields": [
+      {
+        "name": "date",
+        "type": "date",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "total",
+        "type": "currency",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "company_name",
+        "type": "string",
+        "required": true,
+        "hints": null,
+        "description": null
+      }
+    ]
+  },
+  "data": {
+    "date": {
+      "value": "2020-04-04",
+      "confidence": 0.814,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceDate"
+      }
+    },
+    "total": {
+      "value": 7350.0,
+      "confidence": 0.941,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceTotal",
+        "currency": {
+          "amount": 7350.0,
+          "currencyCode": "USD",
+          "currencySymbol": "$"
+        }
+      }
+    },
+    "company_name": {
+      "value": "Hero Limited",
+      "confidence": 0.334,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "VendorName"
+      }
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "meta": {
+    "documents": 1
+  }
+}

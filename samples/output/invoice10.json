@@ -1,0 +1,68 @@
+{
+  "ok": true,
+  "doc_type": "invoice",
+  "model_id": "prebuilt-invoice",
+  "labels": {
+    "doc_type": "invoice",
+    "version": "1.0",
+    "fields": [
+      {
+        "name": "date",
+        "type": "date",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "total",
+        "type": "currency",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "company_name",
+        "type": "string",
+        "required": true,
+        "hints": null,
+        "description": null
+      }
+    ]
+  },
+  "data": {
+    "date": {
+      "value": "2013-04-13",
+      "confidence": 0.952,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceDate"
+      }
+    },
+    "total": {
+      "value": 6204.19,
+      "confidence": 0.889,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceTotal",
+        "currency": {
+          "amount": 6204.19,
+          "currencyCode": "USD",
+          "currencySymbol": "$"
+        }
+      }
+    },
+    "company_name": {
+      "value": "Andrews, Kirby and Valdez",
+      "confidence": 0.886,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "VendorName"
+      }
+    }
+  },
+  "errors": [],
+  "warnings": [],
+  "meta": {
+    "documents": 1
+  }
+}

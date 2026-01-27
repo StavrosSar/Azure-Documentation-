@@ -1,4 +1,4 @@
-# Week 4 – Document Extraction with Azure Document Intelligence
+#  Document Extraction with Azure Document Intelligence
 
 ## Overview
 This project implements a **document extraction pipeline** for invoices using  

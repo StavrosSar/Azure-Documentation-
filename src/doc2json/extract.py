@@ -1,8 +1,7 @@
 import re
 from typing import Dict
-from unittest import result
 from .azure_client import make_client
-from .config import Settings
+from .config import Settings, guess_content_type
 from .schema import LabelSchema
 from .envelope import ExtractionEnvelope, FieldResult, ExtractionError
 
@@ -50,6 +49,7 @@ def _pick_field(fields: dict, candidates: list[str]):
                 return val, conf, k
     return None, None, None
 
+
 def _currency_to_jsonable(v):
     """
     Convert Azure CurrencyValue (or dict-like currency) into:
@@ -95,6 +95,7 @@ def _flatten_read_result(result) -> str:
         return result.content
     return "\n".join(chunks)
 
+
 def _heuristic_find_field(text: str, hints: list[str]) -> str | None:
     for h in hints:
         pattern = rf"{re.escape(h)}\s*[:#]?\s*(.+)"
@@ -103,19 +104,18 @@ def _heuristic_find_field(text: str, hints: list[str]) -> str | None:
             return m.group(1).strip()
     return None
 
-def extract_pdf_to_json(pdf_path: str, labels: LabelSchema, settings: Settings | None = None) -> ExtractionEnvelope:
+
+def extract_document_to_json(file_path: str, labels: LabelSchema, settings: Settings | None = None) -> ExtractionEnvelope:
+    """Extract structured data from a supported document (PDF or image)."""
     settings = settings or Settings()
     client = make_client(settings)
 
-    with open(pdf_path, "rb") as f:
-        #Κλήση Azure μοντέλου/extraction
+    with open(file_path, "rb") as f:
         poller = client.begin_analyze_document(
             model_id=settings.model_id,
             body=f,
-            content_type="application/pdf",
+            content_type=guess_content_type(file_path),
         )
-
-
 
     result = poller.result()
     print("MODEL:", settings.model_id)
@@ -132,28 +132,25 @@ def extract_pdf_to_json(pdf_path: str, labels: LabelSchema, settings: Settings |
 
     text = _flatten_read_result(result)
 
-
     # Extract fields based on labels
     date_val, date_conf, date_key = _pick_field(
         azure_fields,
-        ["InvoiceDate"]
+        ["InvoiceDate"],
     )
 
-    # Extract fields based on labels
     total_val, total_conf, total_key = _pick_field(
         azure_fields,
-        ["InvoiceTotal"]
+        ["InvoiceTotal"],
     )
+
     # Make invoice total JSON-serializable + validator-friendly
     total_amount, total_currency_raw = _currency_to_jsonable(total_val)
     if total_currency_raw is not None:
         total_val = total_amount  # float for validation
-    
-    
-    # Extract fields based on labels
+
     company_val, company_conf, company_key = _pick_field(
         azure_fields,
-        ["VendorName", "CustomerName"]
+        ["VendorName", "CustomerName"],
     )
 
     data = {
@@ -164,12 +161,11 @@ def extract_pdf_to_json(pdf_path: str, labels: LabelSchema, settings: Settings |
             raw={"azure_key": date_key},
         ),
         "total": FieldResult(
-        value=total_val,  # float now (e.g., 144.0)
-        confidence=total_conf,
-        source="prebuilt-invoice",
-        raw={"azure_key": total_key, "currency": total_currency_raw},
-    ),
-
+            value=total_val,  # float now (e.g., 144.0)
+            confidence=total_conf,
+            source="prebuilt-invoice",
+            raw={"azure_key": total_key, "currency": total_currency_raw},
+        ),
         "company_name": FieldResult(
             value=company_val,
             confidence=company_conf,
@@ -178,41 +174,12 @@ def extract_pdf_to_json(pdf_path: str, labels: LabelSchema, settings: Settings |
         ),
     }
 
-
-    #Validation rules of required fields
-    errors = []
-    if date_val is None:
-        errors.append(
-            ExtractionError(
-                code="MISSING_REQUIRED_FIELD",
-                message="Required field not found",
-                field="date",
-            )
-        )
-    if total_val is None:
-        errors.append(
-            ExtractionError(
-                code="MISSING_REQUIRED_FIELD",
-                message="Required field not found",
-                field="total",
-            )
-        )
-    if company_val is None:
-        errors.append(
-            ExtractionError(
-                code="MISSING_REQUIRED_FIELD",
-                message="Required field not found",
-                field="company_name",
-            )
-        )
-
-
     return ExtractionEnvelope(
-        ok=(len(errors) == 0),
+        ok=True,                       
         doc_type=labels.doc_type,
         model_id=settings.model_id,
         labels=labels.model_dump(),
         data=data,
-        errors=errors,
+        errors=[],                     
         meta={"documents": len(getattr(result, "documents", []) or [])},
-        )
+    )

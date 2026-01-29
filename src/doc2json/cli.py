@@ -5,7 +5,7 @@ import typer
 from rich import print
 
 from .schema import invoice_labels
-from .extract import extract_pdf_to_json
+from .extract import extract_document_to_json
 from .validate import validate
 
 app = typer.Typer(add_completion=False)
@@ -42,7 +42,7 @@ def main(name: str, out: str = "samples/output/result.json"):
 
     input_path = resolve_input_file(name)
 
-    env = extract_pdf_to_json(input_path, labels)
+    env = extract_document_to_json(input_path, labels)
     env = validate(env, labels)
 
     Path(out).parent.mkdir(parents=True, exist_ok=True)

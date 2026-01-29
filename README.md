@@ -66,6 +66,9 @@ def invoice_labels() -> LabelSchema:
 ```cmd
 python -m venv venv
 venv\Scripts\activate.bat
+pip install -U pip
+pip install -e .
+
 ```
 
 ### 2. Install dependencies

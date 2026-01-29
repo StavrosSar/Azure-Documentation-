@@ -1,0 +1,70 @@
+{
+  "ok": false,
+  "doc_type": "invoice",
+  "model_id": "prebuilt-invoice",
+  "labels": {
+    "doc_type": "invoice",
+    "version": "1.0",
+    "fields": [
+      {
+        "name": "date",
+        "type": "date",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "total",
+        "type": "currency",
+        "required": true,
+        "hints": null,
+        "description": null
+      },
+      {
+        "name": "company_name",
+        "type": "string",
+        "required": true,
+        "hints": null,
+        "description": null
+      }
+    ]
+  },
+  "data": {
+    "date": {
+      "value": "2020-02-20",
+      "confidence": 0.804,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "InvoiceDate"
+      }
+    },
+    "total": {
+      "value": null,
+      "confidence": null,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": null,
+        "currency": null
+      }
+    },
+    "company_name": {
+      "value": "Hero",
+      "confidence": 0.441,
+      "source": "prebuilt-invoice",
+      "raw": {
+        "azure_key": "VendorName"
+      }
+    }
+  },
+  "errors": [
+    {
+      "code": "MISSING_REQUIRED_FIELD",
+      "message": "Required field not found",
+      "field": "total"
+    }
+  ],
+  "warnings": [],
+  "meta": {
+    "documents": 1
+  }
+}
